@@ -247,3 +247,40 @@ class Product(db.Model):
         """
         logger.info("Processing category query for %s ...", category.name)
         return cls.query.filter(cls.category == category)
+class ProductFactory(factory.Factory):
+    """Creates fake products for testing"""
+
+    class Meta:
+        """Maps factory to data model"""
+
+        model = Product
+
+    id = factory.Sequence(lambda n: n)
+    name = FuzzyChoice(
+        choices=[
+            "Hat",
+            "Pants",
+            "Shirt",
+            "Apple",
+            "Banana",
+            "Pots",
+            "Towels",
+            "Ford",
+            "Chevy",
+            "Hammer",
+            "Wrench"
+        ]
+    )
+    description = factory.Faker("text")
+    price = FuzzyDecimal(0.5, 2000.0, 2)
+    available = FuzzyChoice(choices=[True, False])
+    category = FuzzyChoice(
+        choices=[
+            Category.UNKNOWN,
+            Category.CLOTHS,
+            Category.FOOD,
+            Category.HOUSEWARES,
+            Category.AUTOMOTIVE,
+            Category.TOOLS,
+        ]
+    )
